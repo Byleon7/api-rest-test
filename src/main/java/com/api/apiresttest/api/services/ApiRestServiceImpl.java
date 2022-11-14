@@ -151,9 +151,9 @@ public class ApiRestServiceImpl implements ApiRestService {
             while ((line = br.readLine()) != null) {
                 sb.append(line.trim());
             }
-            String responseString = getResponseTextParsed(sb.toString());
+            String jsonString = parseHtmlStringToJson(sb.toString());
 
-            return ApiHelper.parseStringToJsonArray(responseString);
+            return ApiHelper.parseStringToJsonArray(jsonString);
         }catch (Exception e){
             log.debug("Error in getDataFromAbc: ", e);
             throw new ApiRestException(ApiHelper.G100, "Error interno: " + e.getMessage(), e);
@@ -164,12 +164,12 @@ public class ApiRestServiceImpl implements ApiRestService {
         }
     }
  
-    private String getResponseTextParsed(String htmlString) throws Exception {
+    private String parseHtmlStringToJson(String htmlString) throws Exception {
 
         if (htmlString == null) {
-            throw new Exception("error in getResponseTextParsed - htmlString is null");
+            throw new Exception("error in parseHtmlStringToJson - htmlString is null");
         }
-
+        log.debug("htmlString: "+htmlString);
         try {
             String parseValueStart = "Fusion.globalContent={\"data\":";
             String parseValueEnd= "}}}]";
